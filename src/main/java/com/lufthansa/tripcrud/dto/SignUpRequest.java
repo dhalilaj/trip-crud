@@ -10,13 +10,13 @@ import java.util.Set;
 @Setter
 public class SignUpRequest {
 
-	@NotNull
-	private String username;
+    @NotNull
+    private String username;
 
-	@NotNull
-	private String password;
+    @NotNull
+    private String password;
 
-	@NotNull
-	private Set<String> role;
+    @NotNull
+    private Set<String> role;
 
 }

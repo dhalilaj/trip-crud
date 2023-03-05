@@ -28,7 +28,7 @@ public class FlightController {
 
     @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')") //TO BE TESTED
-        public ResponseEntity<?> createFlight(@Valid @RequestBody FlightDto flightDto){
+    public ResponseEntity<?> createFlight(@Valid @RequestBody FlightDto flightDto) {
 
         this.flightService.createFlight(flightDto);
         return ResponseEntity.ok(new ResponseMsg("You just created your flight"));
@@ -36,13 +36,13 @@ public class FlightController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteFlight(@PathVariable Long id) {
-        flightRepository.deleteById(id); //add service step
+        flightService.deleteById(id); //add service step
         return ResponseEntity.ok(new ResponseMsg("Flight deleted"));
     }
 
     @GetMapping
-        public List<FlightDto> findAllFlights(){
-            return flightService.findAll();
+    public List<FlightDto> findAllFlights() {
+        return flightService.findAll();
     }
 
 

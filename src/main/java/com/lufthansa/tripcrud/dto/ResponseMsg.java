@@ -2,18 +2,18 @@ package com.lufthansa.tripcrud.dto;
 
 public class ResponseMsg {
 
-        private String message;
+    private String message;
 
-        public ResponseMsg(String message) {
-            this.message = message;
-        }
+    public ResponseMsg(String message) {
+        this.message = message;
+    }
 
-        public String getMessage() {
-            return message;
-        }
+    public String getMessage() {
+        return message;
+    }
 
-        public void setMessage(String message) {
-            this.message = message;
-        }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
 }

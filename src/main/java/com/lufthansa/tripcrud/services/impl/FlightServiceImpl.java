@@ -28,17 +28,19 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public void createFlight( FlightDto flightDto){
-    Flight flight = new Flight(flightDto.getFlight_nr(), flightDto.getOrigin(),flightDto.getDestination(),
-            flightDto.getDeparture_date(),flightDto.getArrival_date());
-    flightRepository.save(flight);
+    public void createFlight(FlightDto flightDto) {
+        Flight flight = new Flight(flightDto.getFlight_nr(), flightDto.getOrigin(), flightDto.getDestination(), flightDto.getDeparture_date(), flightDto.getArrival_date());
+        flightRepository.save(flight);
     }
 
     @Override
     public List<FlightDto> findAll() {
-        return flightRepository.findAll().stream()
-                .map(flight -> flightConverter.convertToDto(flight))
-                .collect(Collectors.toList());
+        return flightRepository.findAll().stream().map(flight -> flightConverter.convertToDto(flight)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        flightRepository.deleteById(id);
     }
 
 
@@ -60,13 +62,6 @@ public class FlightServiceImpl implements FlightService {
 //        }
 //
 //    }
-
-
-
-
-
-
-
 
 
 }

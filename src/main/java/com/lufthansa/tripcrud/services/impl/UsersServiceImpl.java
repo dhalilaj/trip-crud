@@ -17,31 +17,24 @@ import java.util.stream.Collectors;
 @Service
 public class UsersServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private UserConverter userConverter;
+
+    @Autowired
+    public UsersServiceImpl(UserRepository userRepository, UserConverter userConverter) {
+        this.userRepository = userRepository;
+        this.userConverter = userConverter;
+    }
 
     @Override
     public List<UserDto> findByUsername(String username) {
-        return userRepository.findUserByUsername(username).stream()
-                .map(user -> userConverter.convertToDto(user))
-                .collect(Collectors.toList());
+        return userRepository.findUserByUsername(username).stream().map(user -> userConverter.convertToDto(user)).collect(Collectors.toList());
     }
 
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
-    }
-
-    @Override
-    public void save(User user) {
-    }
-
-    @Override
-    public void delete(User user) {
-
     }
 
     @Override

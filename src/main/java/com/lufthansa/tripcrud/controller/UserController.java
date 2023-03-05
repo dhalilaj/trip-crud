@@ -32,10 +32,10 @@ public class UserController {
         this.encoder = encoder;
     }
 
-    @GetMapping("/all")
-    public String allAccess() {
-        return "Public Content.";
-    }
+//    @GetMapping("/all")
+//    public String allAccess() {
+//        return "Public Content.";
+//    }
 
 //    @GetMapping("/{username}")
 //    public List<UserDto> findByUsername(@PathVariable String username){
@@ -54,11 +54,9 @@ public class UserController {
 
     @PostMapping("/createUser")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserDto createUser){
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDto createUser) {
         if (userRepository.existsByUsername(createUser.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new ResponseMsg("Error: User with this username already exists!"));
+            return ResponseEntity.badRequest().body(new ResponseMsg("Error: User with this username already exists!"));
         }
         this.userService.createUser(createUser.getUsername(), encoder.encode(createUser.getPassword()), createUser.getRole());
         return ResponseEntity.ok(new ResponseMsg("User added successfully!"));

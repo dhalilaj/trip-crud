@@ -17,7 +17,7 @@ public class FlightDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
     private int flight_nr;
 
@@ -27,7 +27,7 @@ public class FlightDto {
 
     private LocalDate departure_date;
 
-    @DateTimeFormat (pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate arrival_date;
 
 //    private Set<Trip> trip;

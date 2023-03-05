@@ -23,8 +23,7 @@ public class UserPrinciple implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrinciple(Long id, String username, String password,
-                         Collection<? extends GrantedAuthority> authorities) {
+    public UserPrinciple(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -32,9 +31,7 @@ public class UserPrinciple implements UserDetails {
     }
 
     public static UserPrinciple build(User user) {
-        List<GrantedAuthority> authorities = user.getRole().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getCode().name()))
-                .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = user.getRole().stream().map(role -> new SimpleGrantedAuthority(role.getCode().name())).collect(Collectors.toList());
 
         return new UserPrinciple(user.getId(), user.getUsername(), user.getPassword(), authorities);
     }
@@ -80,10 +77,8 @@ public class UserPrinciple implements UserDetails {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         UserPrinciple user = (UserPrinciple) o;
         return Objects.equals(id, user.id);

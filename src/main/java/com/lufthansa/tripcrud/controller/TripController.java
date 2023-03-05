@@ -10,6 +10,7 @@ import com.lufthansa.tripcrud.services.TripService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,6 @@ public class TripController {
     public TripService tripService;
 
     public TripRepository tripRepository;
-
 
     @Autowired
     public TripController(TripService tripService, TripRepository tripRepository) {
@@ -40,7 +40,7 @@ public class TripController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTrip(@PathVariable Long id) {
-        tripRepository.deleteById(id); //add service step
+        tripService.deleteById(id); //add service step
         return ResponseEntity.ok(new ResponseMsg("Trip deleted"));
     }
 
@@ -58,14 +58,13 @@ public class TripController {
 
 
     @PutMapping("/{id}/askApproval")
-//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> askApproval(@PathVariable Long id) {
         tripService.updateStatus(id, TripStatusEnum.WAITING_FOR_APPROVAL);
         return ResponseEntity.ok(new ResponseMsg("Trip status updated to WAITING_FOR_APPROVAL !"));
     }
 
     @PutMapping("/{id}/approve")
-//    @PreAuthorize("hasRole('ADMIN')") //to be tested
+    @PreAuthorize("hasRole('ADMIN')") //to be tested
     public ResponseEntity<?> approve(@PathVariable Long id) {
         tripService.updateStatus(id, TripStatusEnum.APPROVED); //to be tested
         return ResponseEntity.ok(new ResponseMsg("Trip status updated to APPROVED!"));

@@ -11,10 +11,10 @@ public interface FlightService {
 
     void createFlight(FlightDto flightDto);
 
-//    void updateFlight(FlightDto flightDto);
+    //    void updateFlight(FlightDto flightDto);
     List<FlightDto> findAll();
 
+    void deleteById(Long id);
+
 //    void save (FlightDto flightDto);
-//
-//    void delete(Long id);
 }

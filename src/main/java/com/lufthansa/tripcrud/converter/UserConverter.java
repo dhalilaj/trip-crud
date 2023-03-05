@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserConverter {
-    public UserDto convertToDto (User user){
+    public UserDto convertToDto(User user) {
         UserDto convertedUser = new UserDto();
         convertedUser.setUsername(user.getUsername());
         convertedUser.setPassword(user.getPassword());

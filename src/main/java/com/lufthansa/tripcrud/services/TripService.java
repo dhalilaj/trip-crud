@@ -11,11 +11,13 @@ public interface TripService {
 
     List<TripDto> findAll();
 
-    List<TripDto> findTripByStatus (TripStatusEnum status);
+    List<TripDto> findTripByStatus(TripStatusEnum status);
 
-    void save (TripDto tripDto);
+    void save(TripDto tripDto);
 
     void deleteTrip(Long id);
+
+    void deleteById(Long id);
 
     Trip createTrip(TripDto tripDto);
 

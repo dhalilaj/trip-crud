@@ -1,4 +1,5 @@
 package com.lufthansa.tripcrud.dto;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,8 +9,8 @@ import lombok.Setter;
 public class LoginRequest {
     @NotNull
     private String username;
- 
+
     @NotNull
     private String password;
-    
+
 }

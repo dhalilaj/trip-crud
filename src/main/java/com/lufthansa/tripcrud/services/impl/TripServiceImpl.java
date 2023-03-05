@@ -21,37 +21,36 @@ import java.util.stream.Collectors;
 @Service
 public class TripServiceImpl implements TripService {
 
-    @Autowired
     private TripRepository tripRepository;
 
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private TripConverter tripConverter;
 
-    @Autowired
     private FlightRepository flightRepository;
 
-    @Autowired
     private JwtProvider jwtUtils;
 
-    @Autowired
     private HttpServletRequest request;
 
+    @Autowired
+    public TripServiceImpl(TripRepository tripRepository, UserRepository userRepository, TripConverter tripConverter, FlightRepository flightRepository, JwtProvider jwtUtils, HttpServletRequest request) {
+        this.tripRepository = tripRepository;
+        this.userRepository = userRepository;
+        this.tripConverter = tripConverter;
+        this.flightRepository = flightRepository;
+        this.jwtUtils = jwtUtils;
+        this.request = request;
+    }
 
     @Override
     public List<TripDto> findAll() {
         // use the converter TripConverter -> convertToTripDto(trip)
-        return tripRepository.findAll().stream()
-                .map(trip -> tripConverter.convertToDto(trip))
-                .collect(Collectors.toList());
+        return tripRepository.findAll().stream().map(trip -> tripConverter.convertToDto(trip)).collect(Collectors.toList());
     }
 
     @Override
     public List<TripDto> findTripByStatus(@PathVariable TripStatusEnum status) {
-        return tripRepository.findByStatus(status).stream()
-                .map(trip -> tripConverter.convertToDto(trip))
-                .collect(Collectors.toList());
+        return tripRepository.findByStatus(status).stream().map(trip -> tripConverter.convertToDto(trip)).collect(Collectors.toList());
     }
 
     @Override
@@ -66,8 +65,7 @@ public class TripServiceImpl implements TripService {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepository.findByUsername(username);
 
-        Trip trip = new Trip(user, tripDto.getDescription(), tripDto.getOrigin(), tripDto.getDestination(),
-                TripStatusEnum.CREATED, tripDto.getDeparture_date(), tripDto.getArrival_date(), tripDto.getTripreason());
+        Trip trip = new Trip(user, tripDto.getDescription(), tripDto.getOrigin(), tripDto.getDestination(), TripStatusEnum.CREATED, tripDto.getDeparture_date(), tripDto.getArrival_date(), tripDto.getTripreason());
 
         tripRepository.save(trip);
 
@@ -96,6 +94,11 @@ public class TripServiceImpl implements TripService {
             throw new RuntimeException("Trip does not exist!");
         }
 
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        tripRepository.deleteById(id);
     }
 
 
