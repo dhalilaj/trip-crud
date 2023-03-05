@@ -5,9 +5,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 @SpringBootApplication
+//@EnableSwagger2
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class TripCrudApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TripCrudApplication.class, args);
 	}
+
+//	@Bean
+//	public Docket api() {
+//		return new Docket(DocumentationType.SWAGGER_2)
+//				.select()
+//				.apis(RequestHandlerSelectors.any())
+//				.paths(PathSelectors.any())
+//				.build();
+//	}
+
+
 }

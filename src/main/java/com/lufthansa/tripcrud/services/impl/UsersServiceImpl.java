@@ -2,14 +2,20 @@ package com.lufthansa.tripcrud.services.impl;
 
 
 import com.lufthansa.tripcrud.converter.UserConverter;
+import com.lufthansa.tripcrud.dto.CreateUserRequest;
 import com.lufthansa.tripcrud.dto.UserDto;
 import com.lufthansa.tripcrud.entity.Role;
+import com.lufthansa.tripcrud.entity.RoleName;
 import com.lufthansa.tripcrud.entity.User;
+import com.lufthansa.tripcrud.repository.RoleRepository;
 import com.lufthansa.tripcrud.repository.UserRepository;
 import com.lufthansa.tripcrud.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,10 +27,15 @@ public class UsersServiceImpl implements UserService {
 
     private UserConverter userConverter;
 
+    private RoleRepository roleRepository;
+    PasswordEncoder encoder;
+
     @Autowired
-    public UsersServiceImpl(UserRepository userRepository, UserConverter userConverter) {
+    public UsersServiceImpl(UserRepository userRepository, UserConverter userConverter, RoleRepository roleRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
+        this.roleRepository = roleRepository;
+        this.encoder = encoder;
     }
 
     @Override
@@ -38,8 +49,13 @@ public class UsersServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(String username, String password, Set<Role> roles) {
-        User user = new User(username, password, roles);
+    public void createUser(CreateUserRequest createUserRequest) {
+
+
+        Set<Role> roles = new HashSet<>(Arrays.asList(roleRepository.findByCode(RoleName.USER).get()));
+
+        User user = new User(createUserRequest.getUsername(), encoder.encode(createUserRequest.getPassword()), roles);
+
         this.userRepository.save(user);
     }
 

@@ -16,5 +16,6 @@ public interface FlightService {
 
     void deleteById(Long id);
 
+//    List<FlightDto> findByFlight_nr( int flight_no);
 //    void save (FlightDto flightDto);
 }

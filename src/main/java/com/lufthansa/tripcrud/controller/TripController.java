@@ -28,6 +28,7 @@ public class TripController {
         this.tripRepository = tripRepository;
     }
 
+
     @GetMapping("/{status}")
     public List<TripDto> findTripByStatus(@PathVariable TripStatusEnum status) {
         return tripService.findTripByStatus(status);
@@ -64,14 +65,14 @@ public class TripController {
     }
 
     @PutMapping("/{id}/approve")
-    @PreAuthorize("hasRole('ADMIN')") //to be tested
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> approve(@PathVariable Long id) {
         tripService.updateStatus(id, TripStatusEnum.APPROVED); //to be tested
         return ResponseEntity.ok(new ResponseMsg("Trip status updated to APPROVED!"));
     }
 
     @PutMapping("/attachFlight")
-//    @PreAuthorize("hasRole('ADMIN')") //to be tested
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> attachFlight(@Valid @RequestBody AttachFlightRequest attachFlightRequest) {
         tripService.attachFlight(attachFlightRequest);
         return ResponseEntity.ok(new ResponseMsg("Flight is added to your trip!"));

@@ -38,7 +38,7 @@ public class TripDto {
     @DateTimeFormat (pattern = "yyyy-MM-dd")
     private LocalDate arrival_date;
 
-    //@NotNull
+    @NotNull
     private TripReasonEnum tripreason;
 
 }

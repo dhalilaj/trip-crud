@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Getter
 @Setter
@@ -21,13 +18,4 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     private RoleName code;
-
-//    public Role(RoleName code, Set<User> users) {
-//        this.code = code;
-////        this.users = users;
-//    }
-
-
-    // private Set<User> users = new HashSet<>();
-
 }

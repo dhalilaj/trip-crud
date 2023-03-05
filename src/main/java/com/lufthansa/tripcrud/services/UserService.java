@@ -1,5 +1,7 @@
 package com.lufthansa.tripcrud.services;
 
+import com.lufthansa.tripcrud.dto.CreateUserRequest;
+import com.lufthansa.tripcrud.dto.SignUpRequest;
 import com.lufthansa.tripcrud.dto.UserDto;
 import com.lufthansa.tripcrud.entity.Role;
 import com.lufthansa.tripcrud.entity.User;
@@ -14,6 +16,6 @@ public interface UserService {
     List<User> findAll();
 
 
-    public void createUser(String username, String password, Set<Role> roles);
+    public void createUser(CreateUserRequest createUserRequest);
 
 }

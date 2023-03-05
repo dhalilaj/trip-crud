@@ -2,7 +2,6 @@ package com.lufthansa.tripcrud.controller;
 
 import com.lufthansa.tripcrud.dto.FlightDto;
 import com.lufthansa.tripcrud.dto.ResponseMsg;
-import com.lufthansa.tripcrud.entity.Flight;
 import com.lufthansa.tripcrud.repository.FlightRepository;
 import com.lufthansa.tripcrud.services.FlightService;
 import jakarta.validation.Valid;
@@ -27,7 +26,7 @@ public class FlightController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasRole('ADMIN')") //TO BE TESTED
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createFlight(@Valid @RequestBody FlightDto flightDto) {
 
         this.flightService.createFlight(flightDto);
