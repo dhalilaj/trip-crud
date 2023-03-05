@@ -35,15 +35,15 @@ public class FlightController {
         return ResponseEntity.ok(new ResponseMsg("You just created your flight"));
     }
 
-    @GetMapping
-        public List<FlightDto> findAllFlights(){
-            return flightService.findAll();
-    }
+//    @GetMapping
+//        public List<FlightDto> findAllFlights(){
+//            return flightService.findAll();
+//    }
 
-    @DeleteMapping("/flightNr/{flight_nr}")
-    public ResponseEntity<?> deleteById (@PathVariable Long id){
-        flightRepository.deleteById(id);
-        return ResponseEntity.ok(new ResponseMsg("Flight deleted successfully!"));
-    }
+//    @DeleteMapping("/flightNr/{flight_nr}")
+//    public ResponseEntity<?> deleteById (@PathVariable Long id){
+//        flightRepository.deleteById(id);
+//        return ResponseEntity.ok(new ResponseMsg("Flight deleted successfully!"));
+//    }
 
 }

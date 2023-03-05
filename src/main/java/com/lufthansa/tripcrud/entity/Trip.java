@@ -8,8 +8,6 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -21,6 +19,11 @@ public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @Column(name = "trip_reason")
+    @Enumerated(EnumType.STRING)
+    private TripReasonEnum reason;
 
     @NotNull
     @Column(name = "description")
@@ -35,52 +38,50 @@ public class Trip {
     private String destination;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private TripStatusEnum status;
 
     @NotNull
-    @Column(name="departure_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "departure_date")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate departure_date;
 
     @NotNull
-    @Column(name="arrival_date")
-    @DateTimeFormat (pattern = "yyyy-MM-dd")
+    @Column(name = "arrival_date")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate arrival_date;
 
-    @ManyToOne(targetEntity = TripReason.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="reasonOfTrip", referencedColumnName = "id")
-    @Enumerated(EnumType.STRING)
-    private TripReasonEnum trip_reason;
 
     @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="tripUser", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+
     @ManyToOne(targetEntity = Flight.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="trip_flight", referencedColumnName = "id")
+    @JoinColumn(name = "flight_id", referencedColumnName = "id")
     private Flight flight;
 
 
-    public Trip(String description, String origin, String destinationon, String status, LocalDate departure_date, LocalDate arrival_date, TripReasonEnum trip_reason) {
+//    public Trip(String description, String origin, String destinationon, TripStatusEnum status, LocalDate departure_date, LocalDate arrival_date, TripReasonEnum reason) {
+//        this.description = description;
+//        this.origin = origin;
+//        this.destination = destination;
+//        this.status = status;
+//        this.departure_date = departure_date;
+//        this.arrival_date = arrival_date;
+//        this.reason = reason;
+//    }
+
+    public Trip(User user, String description, String origin, String destination, TripStatusEnum status, LocalDate departure_date, LocalDate arrival_date, TripReasonEnum reason) {
+
+        this.user = user;
         this.description = description;
         this.origin = origin;
         this.destination = destination;
         this.status = status;
         this.departure_date = departure_date;
         this.arrival_date = arrival_date;
-        this.trip_reason = trip_reason;
-    }
-
-    public Trip(Flight flight, User user, String description, String origin, String destination, String status, LocalDate departure_date, LocalDate arrival_date, TripReasonEnum trip_reason) {
-    this.flight=flight;
-    this.user=user;
-    this.description = description;
-    this.origin = origin;
-    this.destination = destination;
-    this.status = status;
-    this.departure_date = departure_date;
-    this.arrival_date = arrival_date;
-    this.trip_reason = trip_reason;
+        this.reason = reason;
     }
 }

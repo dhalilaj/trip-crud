@@ -2,26 +2,23 @@ package com.lufthansa.tripcrud.services;
 
 import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.entity.Trip;
-import com.lufthansa.tripcrud.entity.TripReasonEnum;
+import com.lufthansa.tripcrud.entity.TripStatusEnum;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface TripService {
 
     List<TripDto> findAll();
 
-    List<TripDto> findTripByStatus (String status);
+    List<TripDto> findTripByStatus (TripStatusEnum status);
 
     void save (TripDto tripDto);
 
     void deleteTrip(Long id);
 
-    Trip createTrip(Long flight_id, String description, String from, String to, String status, LocalDate departure_date,
-                    LocalDate arrival_date, TripReasonEnum tripreason);
+    Trip createTrip(TripDto tripDto);
 
-    Trip updateTripStatus(Long id, String status);
+    void updateTrip(TripDto tripDto);
 
-    void updateTrip(Long id,String description, String from, String to, LocalDate departure_date,
-                    LocalDate arrival_date, TripReasonEnum tripreason);
+    void updateStatus(Long id, TripStatusEnum status);
 }

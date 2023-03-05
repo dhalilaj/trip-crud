@@ -9,6 +9,7 @@ import com.lufthansa.tripcrud.repository.RoleRepository;
 import com.lufthansa.tripcrud.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,45 +55,19 @@ public class AuthRestAPIsController {
 		return ResponseEntity.ok(new JwtResponse(jwt));
 	}
 
-//	@PostMapping("/signup")
-//	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-//		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-//			return ResponseEntity
-//					.badRequest()
-//					.body(new ResponseMsg("Error: Username is already taken!"));
-//		}
-//
-//		User user = new User (signUpRequest.getUsername(),
-//				encoder.encode(signUpRequest.getPassword()));
-//
-//		Set<String> strRoles = signUpRequest.getRole();
-//		Set<Role> roles = new HashSet<>();
-//
-//		if (strRoles == null) {
-//			Role userRole = roleRepository.findByCode(RoleName.USER)
-//					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//			roles.add(userRole);
-//		} else {
-//			strRoles.forEach(role -> {
-//				switch (role) {
-//					case "admin":
-//						Role adminRole = roleRepository.findByCode(RoleName.ADMIN)
-//								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//						roles.add(adminRole);
-//
-//						break;
-//					default:
-//						Role userRole = roleRepository.findByCode(RoleName.USER)
-//								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//						roles.add(userRole);
-//				}
-//			});
-//		}
-//
-//		user.setRole(roles);
-//		userRepository.save(user);
-//
-//		return ResponseEntity.ok(new ResponseMsg("User registered successfully!"));
-//	}
+	@PostMapping("/signup")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) throws Exception {
+		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+			return new ResponseEntity<String>("Username is already taken!", HttpStatus.BAD_REQUEST);
+		}
+
+		User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
+		Set<Role> roles = new HashSet<>();
+
+		roles.add(roleRepository.findByCode(RoleName.USER).get());
+		user.setRole(roles);
+		userRepository.save(user);
+		return ResponseEntity.ok().body("User registered successfully!");
+	}
 
 }

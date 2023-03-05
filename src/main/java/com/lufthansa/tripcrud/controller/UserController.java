@@ -37,20 +37,20 @@ public class UserController {
         return "Public Content.";
     }
 
-    @GetMapping("/{username}")
-    public List<UserDto> findByUsername(@PathVariable String username){
-        return userService.findByUsername(username);
-    }
+//    @GetMapping("/{username}")
+//    public List<UserDto> findByUsername(@PathVariable String username){
+//        return userService.findByUsername(username);
+//    }
 
-    @PostMapping("/{username}")
-    public List<UserDto> username(@PathVariable String username){
-        return userService.findByUsername(username);
-    }
+//    @PostMapping("/{username}")
+//    public List<UserDto> username(@PathVariable String username){
+//        return userService.findByUsername(username);
+//    }
 
-    @GetMapping("/list")
-    public List<User> findAllUsers() {
-            return userService.findAll();
-    }
+//    @GetMapping("/list")
+//    public List<User> findAllUsers() {
+//            return userService.findAll();
+//    }
 
     @PostMapping("/createUser")
     @PreAuthorize("hasRole('ADMIN')")

@@ -13,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,8 +47,8 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public List<TripDto> findTripByStatus(@PathVariable String status) {
-        return tripRepository.findTripByStatus(status).stream()
+    public List<TripDto> findTripByStatus(@PathVariable TripStatusEnum status) {
+        return tripRepository.findByStatus(status).stream()
                 .map(trip -> tripConverter.convertToDto(trip))
                 .collect(Collectors.toList());
     }
@@ -59,20 +58,21 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip createTrip(Long flightId, String description, String from, String to, String status, LocalDate departure_date,
-                           LocalDate arrival_date, TripReasonEnum trip_reason) {
+    public Trip createTrip(TripDto tripDto) {
 
-        Flight flight = this.flightRepository.getReferenceById(flightId);
+//        Flight flight = flightRepository.getReferenceById(flightId);
 
         String headerAuth = request.getHeader("Authorization");
-        String jwt= headerAuth.substring(7, headerAuth.length());
+        String jwt = headerAuth.substring(7, headerAuth.length());
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        User user = this.userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
 
-        Trip trip = new Trip(flight, user, description, from, to, status, departure_date, arrival_date, trip_reason);
-        this.tripRepository.save(trip);
+        Trip trip = new Trip(user, tripDto.getDescription(), tripDto.getOrigin(), tripDto.getDestination(),
+                TripStatusEnum.CREATED, tripDto.getDeparture_date(), tripDto.getArrival_date(), tripDto.getTripreason());
 
-        flight.getTrip().add(trip);
+        tripRepository.save(trip);
+
+//        flight.getTrip().add(trip);
         user.getTrip().add(trip);
 
         return trip;
@@ -82,72 +82,49 @@ public class TripServiceImpl implements TripService {
     public void deleteTrip(Long tripId) {
 
         String headerAuth = request.getHeader("Authorization");
-        String jwt= headerAuth.substring(7, headerAuth.length());
+        String jwt = headerAuth.substring(7, headerAuth.length());
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
-        User user = this.userRepository.findByUsername(username);
-        Trip app= this.tripRepository.getReferenceById(tripId);
-        Flight vehicle=app.getFlight();
+        User user = userRepository.findByUsername(username);
+        Trip trip = tripRepository.getReferenceById(tripId);
+        Flight vehicle = trip.getFlight();
 
-        vehicle.getTrip().remove(app);
-        user.getTrip().remove(app);
-        this.tripRepository.deleteById(tripId);
+        vehicle.getTrip().remove(trip);
+        user.getTrip().remove(trip);
+        tripRepository.deleteById(tripId);
     }
 
 
-
-
     @Override
-    public void updateTrip(Long id, String newdescription, String neworigin, String newdestination,
-                           LocalDate newdeparture_date, LocalDate newarrival_date, TripReasonEnum newtripreason) {
+    public void updateTrip(TripDto tripDto) {
 
-        String headerAuth = request.getHeader("Authorization");
-        String jwt= headerAuth.substring(7, headerAuth.length());
-        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        Trip trip = tripRepository.getReferenceById(tripDto.getId());
 
-        User user = this.userRepository.findByUsername(username);
-        Trip trip= this.tripRepository.getReferenceById(id);
-        Flight vehicle=trip.getFlight();
+        trip.setDescription(tripDto.getDescription());
+        trip.setOrigin(tripDto.getOrigin());
+        trip.setDestination(tripDto.getDestination());
+        trip.setDeparture_date(tripDto.getDeparture_date());
+        trip.setArrival_date(tripDto.getArrival_date());
+        trip.setReason(tripDto.getTripreason());
 
-        //Trip trip = this.tripRepository.findTripById(id);
-        trip.setArrival_date(newarrival_date);
-        trip.setDescription(newdescription);
-        trip.setTrip_reason(newtripreason);
-        trip.setDeparture_date(newdeparture_date);
-        trip.setOrigin(neworigin);
-        trip.setDestination(newdestination);
-
-        vehicle.getTrip().add(trip);
-        user.getTrip().add(trip);
-
-        this.flightRepository.save(vehicle);
-        this.userRepository.save(user);
-
-        this.tripRepository.save(trip);
+        tripRepository.save(trip);
 
     }
 
 
     @Override
-    public Trip updateTripStatus(Long id, String status){
-        String headerAuth = request.getHeader("Authorization");
-        String jwt= headerAuth.substring(7, headerAuth.length());
-        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+    public void updateStatus(Long id, TripStatusEnum status) {
 
-        User user = this.userRepository.findByUsername(username);
-        Trip app= this.tripRepository.getReferenceById(id);
-        Flight vehicle=app.getFlight();
+        Optional<Trip> trip = tripRepository.findById(id);
 
-        app.setStatus(status);
-
-        vehicle.getTrip().add(app);
-        user.getTrip().add(app);
-
-        this.flightRepository.save(vehicle);
-        this.userRepository.save(user);
-
-        return this.tripRepository.save(app);
+        if (trip.isPresent()) {
+            trip.get().setStatus(status);
+        } else {
+            throw new RuntimeException("Trip does not exist!");
+        }
     }
+
+
 
 
 }

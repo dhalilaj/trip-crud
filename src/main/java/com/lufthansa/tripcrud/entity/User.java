@@ -22,7 +22,8 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> role;
 
     public User(String username, String password, Set<Role> role) {
@@ -34,4 +35,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Trip> trip;
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

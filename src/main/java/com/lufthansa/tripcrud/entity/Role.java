@@ -22,18 +22,12 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleName code;
 
-    public Role(RoleName code, Set<User> users) {
-        this.code = code;
-        this.users = users;
-    }
+//    public Role(RoleName code, Set<User> users) {
+//        this.code = code;
+////        this.users = users;
+//    }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "USER_ROLE", joinColumns ={
-            @JoinColumn(name = "role_id", referencedColumnName = "id")},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "user_id", referencedColumnName = "id")
-            }
-    )
-    private Set<User> users = new HashSet<>();
+
+   // private Set<User> users = new HashSet<>();
 
 }
