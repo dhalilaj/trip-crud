@@ -10,7 +10,7 @@ public class FlightConverter {
     public FlightDto convertToDto (Flight flight){
 
         FlightDto convertedFlight = new FlightDto();
-        convertedFlight.setFlight_id(flight.getId());
+        convertedFlight.setId(flight.getId());
         convertedFlight.setFlight_nr(flight.getFlight_nr());
         convertedFlight.setDeparture_date(flight.getDeparture_date());
         convertedFlight.setArrival_date(flight.getArrival_date());

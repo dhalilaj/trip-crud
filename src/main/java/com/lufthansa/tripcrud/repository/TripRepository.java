@@ -13,6 +13,5 @@ public interface TripRepository extends JpaRepository <Trip, Long>{
      List<Trip> findByStatus (TripStatusEnum status);
 
      Optional<Trip> findById(Long id);
-     Trip findTripById(Long id);
      void deleteById(Long id);
 }

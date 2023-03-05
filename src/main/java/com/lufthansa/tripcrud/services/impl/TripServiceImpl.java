@@ -1,6 +1,7 @@
 package com.lufthansa.tripcrud.services.impl;
 
 import com.lufthansa.tripcrud.converter.TripConverter;
+import com.lufthansa.tripcrud.dto.AttachFlightRequest;
 import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.entity.*;
 import com.lufthansa.tripcrud.repository.FlightRepository;
@@ -60,8 +61,6 @@ public class TripServiceImpl implements TripService {
     @Override
     public Trip createTrip(TripDto tripDto) {
 
-//        Flight flight = flightRepository.getReferenceById(flightId);
-
         String headerAuth = request.getHeader("Authorization");
         String jwt = headerAuth.substring(7, headerAuth.length());
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
@@ -72,7 +71,6 @@ public class TripServiceImpl implements TripService {
 
         tripRepository.save(trip);
 
-//        flight.getTrip().add(trip);
         user.getTrip().add(trip);
 
         return trip;
@@ -86,28 +84,37 @@ public class TripServiceImpl implements TripService {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
         User user = userRepository.findByUsername(username);
-        Trip trip = tripRepository.getReferenceById(tripId);
-        Flight vehicle = trip.getFlight();
+        Optional<Trip> trip = tripRepository.findById(tripId);
 
-        vehicle.getTrip().remove(trip);
-        user.getTrip().remove(trip);
-        tripRepository.deleteById(tripId);
+        if (trip.isPresent()) {
+            Flight vehicle = trip.get().getFlight();
+
+            vehicle.getTrip().remove(trip);
+            user.getTrip().remove(trip);
+            tripRepository.deleteById(tripId);
+        } else {
+            throw new RuntimeException("Trip does not exist!");
+        }
+
     }
 
 
     @Override
     public void updateTrip(TripDto tripDto) {
 
-        Trip trip = tripRepository.getReferenceById(tripDto.getId());
+        Optional<Trip> trip = tripRepository.findById(tripDto.getId());
 
-        trip.setDescription(tripDto.getDescription());
-        trip.setOrigin(tripDto.getOrigin());
-        trip.setDestination(tripDto.getDestination());
-        trip.setDeparture_date(tripDto.getDeparture_date());
-        trip.setArrival_date(tripDto.getArrival_date());
-        trip.setReason(tripDto.getTripreason());
-
-        tripRepository.save(trip);
+        if (trip.isPresent()) {
+            trip.get().setDescription(tripDto.getDescription());
+            trip.get().setOrigin(tripDto.getOrigin());
+            trip.get().setDestination(tripDto.getDestination());
+            trip.get().setDeparture_date(tripDto.getDeparture_date());
+            trip.get().setArrival_date(tripDto.getArrival_date());
+            trip.get().setReason(tripDto.getTripreason());
+            tripRepository.save(trip.get());
+        } else {
+            throw new RuntimeException("Trip does not exist!");
+        }
 
     }
 
@@ -119,12 +126,34 @@ public class TripServiceImpl implements TripService {
 
         if (trip.isPresent()) {
             trip.get().setStatus(status);
+            tripRepository.save(trip.get());
         } else {
             throw new RuntimeException("Trip does not exist!");
         }
     }
 
+    @Override
+    public void attachFlight(AttachFlightRequest attachFlightRequest) {
+        Optional<Trip> trip = tripRepository.findById(attachFlightRequest.getTrip_id());
+        if (trip.isPresent()) {
+            if (trip.get().getStatus().equals(TripStatusEnum.APPROVED)) {
 
+                Optional<Flight> flight = flightRepository.findById(attachFlightRequest.getFlight_id());
+
+                if (flight.isPresent()) {
+                    trip.get().setFlight(flight.get());
+                    tripRepository.save(trip.get());
+                } else {
+                    throw new RuntimeException("Flight does not exist!");
+                }
+
+            } else {
+                throw new RuntimeException("You cannot add a flight to a non approved trip!");
+            }
+        } else {
+            throw new RuntimeException("Trip does not exist!");
+        }
+    }
 
 
 }

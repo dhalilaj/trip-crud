@@ -30,20 +30,20 @@ public class FlightController {
     @PreAuthorize("hasRole('ADMIN')") //TO BE TESTED
         public ResponseEntity<?> createFlight(@Valid @RequestBody FlightDto flightDto){
 
-        this.flightService.createFlight(flightDto.getFlight_nr(), flightDto.getOrigin(), flightDto.getDestination(),
-                flightDto.getDeparture_date(),flightDto.getArrival_date());
+        this.flightService.createFlight(flightDto);
         return ResponseEntity.ok(new ResponseMsg("You just created your flight"));
     }
 
-//    @GetMapping
-//        public List<FlightDto> findAllFlights(){
-//            return flightService.findAll();
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteFlight(@PathVariable Long id) {
+        flightRepository.deleteById(id); //add service step
+        return ResponseEntity.ok(new ResponseMsg("Flight deleted"));
+    }
 
-//    @DeleteMapping("/flightNr/{flight_nr}")
-//    public ResponseEntity<?> deleteById (@PathVariable Long id){
-//        flightRepository.deleteById(id);
-//        return ResponseEntity.ok(new ResponseMsg("Flight deleted successfully!"));
-//    }
+    @GetMapping
+        public List<FlightDto> findAllFlights(){
+            return flightService.findAll();
+    }
+
 
 }

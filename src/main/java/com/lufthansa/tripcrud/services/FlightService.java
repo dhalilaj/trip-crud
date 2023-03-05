@@ -9,15 +9,12 @@ import java.util.List;
 
 public interface FlightService {
 
-    void createFlight(int flight_nr, String from, String to, LocalDate departure_date, LocalDate arrival_date);
+    void createFlight(FlightDto flightDto);
 
+//    void updateFlight(FlightDto flightDto);
     List<FlightDto> findAll();
 
-//    List<FlightDto> findFlightByFlightNr(int flight_nr);
-
-//    public void deleteByFlightNr(@PathVariable int flight_nr);
-
-    void save (FlightDto flightDto);
-
-    void delete(Long id);
+//    void save (FlightDto flightDto);
+//
+//    void delete(Long id);
 }

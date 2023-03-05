@@ -1,6 +1,7 @@
 package com.lufthansa.tripcrud.controller;
 
-import com.lufthansa.tripcrud.dto.DeleteTripDto;
+
+import com.lufthansa.tripcrud.dto.AttachFlightRequest;
 import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.dto.ResponseMsg;
 import com.lufthansa.tripcrud.entity.TripStatusEnum;
@@ -9,7 +10,6 @@ import com.lufthansa.tripcrud.services.TripService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/trip")
 public class TripController {
-    @Autowired
-    private DeleteTripDto deleteTripDto;
     public TripService tripService;
 
     public TripRepository tripRepository;
@@ -71,6 +69,13 @@ public class TripController {
     public ResponseEntity<?> approve(@PathVariable Long id) {
         tripService.updateStatus(id, TripStatusEnum.APPROVED); //to be tested
         return ResponseEntity.ok(new ResponseMsg("Trip status updated to APPROVED!"));
+    }
+
+    @PutMapping("/attachFlight")
+//    @PreAuthorize("hasRole('ADMIN')") //to be tested
+    public ResponseEntity<?> attachFlight(@Valid @RequestBody AttachFlightRequest attachFlightRequest) {
+        tripService.attachFlight(attachFlightRequest);
+        return ResponseEntity.ok(new ResponseMsg("Flight is added to your trip!"));
     }
 
 }

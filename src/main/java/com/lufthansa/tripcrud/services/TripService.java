@@ -1,5 +1,6 @@
 package com.lufthansa.tripcrud.services;
 
+import com.lufthansa.tripcrud.dto.AttachFlightRequest;
 import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.entity.Trip;
 import com.lufthansa.tripcrud.entity.TripStatusEnum;
@@ -21,4 +22,6 @@ public interface TripService {
     void updateTrip(TripDto tripDto);
 
     void updateStatus(Long id, TripStatusEnum status);
+
+    void attachFlight(AttachFlightRequest attachFlightRequest);
 }
