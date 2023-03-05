@@ -34,17 +34,6 @@ public class TripController {
         return tripService.findTripByStatus(status);
     }
 
-//    @GetMapping
-//    public List<TripDto> findAllTrips(){
-//        return tripService.findAll();
-//    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTrip(@PathVariable Long id) {
-        tripService.deleteById(id); //add service step
-        return ResponseEntity.ok(new ResponseMsg("Trip deleted"));
-    }
-
     @PostMapping
     public ResponseEntity<?> createTrip(@Valid @RequestBody TripDto tripDto) {
         tripService.createTrip(tripDto);
@@ -55,6 +44,18 @@ public class TripController {
     public ResponseEntity<?> updateTrip(@Valid @RequestBody TripDto tripDto) {
         tripService.updateTrip(tripDto);
         return ResponseEntity.ok(new ResponseMsg("Trip updated successfully!"));
+    }
+
+
+//    @GetMapping
+//    public List<TripDto> findAllTrips(){
+//        return tripService.findAll();
+//    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTrip(@PathVariable Long id) {
+        tripService.deleteById(id); //add service step
+        return ResponseEntity.ok(new ResponseMsg("Trip deleted"));
     }
 
 

@@ -29,26 +29,6 @@ public class UserController {
         this.encoder = encoder;
     }
 
-//    @GetMapping("/all")
-//    public String allAccess() {
-//        return "Public Content.";
-//    }
-
-//    @GetMapping("/{username}")
-//    public List<UserDto> findByUsername(@PathVariable String username){
-//        return userService.findByUsername(username);
-//    }
-
-//    @PostMapping("/{username}")
-//    public List<UserDto> username(@PathVariable String username){
-//        return userService.findByUsername(username);
-//    }
-
-//    @GetMapping("/list")
-//    public List<User> findAllUsers() {
-//            return userService.findAll();
-//    }
-
     @PostMapping("/createUser")
 //    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {

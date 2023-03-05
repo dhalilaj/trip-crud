@@ -51,7 +51,6 @@ public class UsersServiceImpl implements UserService {
     @Override
     public void createUser(CreateUserRequest createUserRequest) {
 
-
         Set<Role> roles = new HashSet<>(Arrays.asList(roleRepository.findByCode(RoleName.USER).get()));
 
         User user = new User(createUserRequest.getUsername(), encoder.encode(createUserRequest.getPassword()), roles);

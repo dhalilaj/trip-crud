@@ -35,7 +35,7 @@ public class TripDto {
     private LocalDate departure_date;
 
     @NotNull
-    @DateTimeFormat (pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate arrival_date;
 
     @NotNull

@@ -9,9 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TripRepository extends JpaRepository <Trip, Long>{
-     List<Trip> findByStatus (TripStatusEnum status);
+public interface TripRepository extends JpaRepository<Trip, Long> {
+    List<Trip> findByStatus(TripStatusEnum status);
 
-     Optional<Trip> findById(Long id);
-     void deleteById(Long id);
+    Optional<Trip> findById(Long id);
+
+    void deleteById(Long id);
 }

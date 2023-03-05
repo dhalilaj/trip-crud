@@ -7,7 +7,6 @@ import com.lufthansa.tripcrud.repository.FlightRepository;
 import com.lufthansa.tripcrud.services.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,13 +40,5 @@ public class FlightServiceImpl implements FlightService {
     public void deleteById(Long id) {
         flightRepository.deleteById(id);
     }
-
-//    @Override
-//    public List<FlightDto> findByFlight_nr(@PathVariable int flight_no){
-//        flightRepository.findByFlight_nr(flight_no).stream()
-//                .map(trip -> flightConverter.convertToDto(flight))
-//                .collect(Collectors.toList());
-//    }
-
 
 }

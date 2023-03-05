@@ -62,17 +62,6 @@ public class Trip {
     @JoinColumn(name = "flight_id", referencedColumnName = "id")
     private Flight flight;
 
-
-//    public Trip(String description, String origin, String destinationon, TripStatusEnum status, LocalDate departure_date, LocalDate arrival_date, TripReasonEnum reason) {
-//        this.description = description;
-//        this.origin = origin;
-//        this.destination = destination;
-//        this.status = status;
-//        this.departure_date = departure_date;
-//        this.arrival_date = arrival_date;
-//        this.reason = reason;
-//    }
-
     public Trip(User user, String description, String origin, String destination, TripStatusEnum status, LocalDate departure_date, LocalDate arrival_date, TripReasonEnum reason) {
 
         this.user = user;

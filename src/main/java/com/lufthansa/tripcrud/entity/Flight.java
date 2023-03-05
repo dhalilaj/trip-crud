@@ -29,12 +29,12 @@ public class Flight {
     @Column(name = "Destination")
     private String destination;
 
-    @Column(name="departure_date")
+    @Column(name = "departure_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate departure_date;
 
-    @Column(name="arrival_date")
-    @DateTimeFormat (pattern = "yyyy-MM-dd")
+    @Column(name = "arrival_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate arrival_date;
 
     @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY)
@@ -47,7 +47,6 @@ public class Flight {
         this.departure_date = departure_date;
         this.arrival_date = arrival_date;
     }
-
 
 
 }
