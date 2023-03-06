@@ -3,7 +3,6 @@ package com.lufthansa.tripcrud.exception;
 import com.lufthansa.tripcrud.dto.ResponseMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

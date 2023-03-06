@@ -84,17 +84,13 @@ public class TripServiceImpl implements TripService {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
         User user = userRepository.findByUsername(username);
-        Optional<Trip> trip = tripRepository.findById(tripId);
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
 
-        if (trip.isPresent()) {
-            Flight flight = trip.get().getFlight();
+        Flight flight = trip.getFlight();
 
-            flight.getTrip().remove(trip);
-            user.getTrip().remove(trip);
-            tripRepository.deleteById(tripId);
-        } else {
-            throw new TripNotFoundException(tripId);
-        }
+        flight.getTrip().remove(trip);
+        user.getTrip().remove(trip);
+        tripRepository.deleteById(tripId);
 
     }
 
@@ -107,19 +103,15 @@ public class TripServiceImpl implements TripService {
     @Override
     public void updateTrip(TripDto tripDto) throws TripNotFoundException {
 
-        Optional<Trip> trip = tripRepository.findById(tripDto.getId());
+        Trip trip = tripRepository.findById(tripDto.getId()).orElseThrow(() -> new TripNotFoundException(tripDto.getId()));
 
-        if (trip.isPresent()) {
-            trip.get().setDescription(tripDto.getDescription());
-            trip.get().setOrigin(tripDto.getOrigin());
-            trip.get().setDestination(tripDto.getDestination());
-            trip.get().setDeparture_date(tripDto.getDeparture_date());
-            trip.get().setArrival_date(tripDto.getArrival_date());
-            trip.get().setReason(tripDto.getTripreason());
-            tripRepository.save(trip.get());
-        } else {
-            throw new TripNotFoundException(tripDto.getId());
-        }
+        trip.setDescription(tripDto.getDescription());
+        trip.setOrigin(tripDto.getOrigin());
+        trip.setDestination(tripDto.getDestination());
+        trip.setDeparture_date(tripDto.getDeparture_date());
+        trip.setArrival_date(tripDto.getArrival_date());
+        trip.setReason(tripDto.getTripreason());
+        tripRepository.save(trip);
 
     }
 
@@ -138,27 +130,16 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public void attachFlight(AttachFlightRequest attachFlightRequest) throws FlightNotFoundException, AttachFlightException, TripNotFoundException {
-        Optional<Trip> trip = tripRepository.findById(attachFlightRequest.getTrip_id());
-        if (trip.isPresent()) {
-            if (trip.get().getStatus().equals(TripStatusEnum.APPROVED)) {
+    public void attachFlight(AttachFlightRequest attachFlightRequest) {
+        Trip trip = tripRepository.findById(attachFlightRequest.getTrip_id()).orElseThrow(() -> new TripNotFoundException(attachFlightRequest.getTrip_id()));
 
-                Optional<Flight> flight = flightRepository.findById(attachFlightRequest.getFlight_id());
-
-                if (flight.isPresent()) {
-                    trip.get().setFlight(flight.get());
-                    tripRepository.save(trip.get());
-                } else {
-                    throw new FlightNotFoundException(attachFlightRequest.getFlight_id());
-                }
-
-            } else {
-                throw new AttachFlightException("Cannot add flight to a non Approved trip");
-            }
+        if (trip.getStatus().equals(TripStatusEnum.APPROVED)) {
+            Flight flight = flightRepository.findById(attachFlightRequest.getFlight_id()).orElseThrow(() -> new FlightNotFoundException(attachFlightRequest.getFlight_id()));
+            trip.setFlight(flight);
+            tripRepository.save(trip);
         } else {
-            throw new TripNotFoundException(attachFlightRequest.getTrip_id());
+            throw new AttachFlightException("Cannot add flight to a non Approved trip");
         }
     }
-
 
 }

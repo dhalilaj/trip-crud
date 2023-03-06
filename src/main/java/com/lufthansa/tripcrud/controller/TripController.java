@@ -49,7 +49,7 @@ public class TripController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateTrip(@Valid @RequestBody TripDto tripDto) throws TripNotFoundException {
+    public ResponseEntity<?> updateTrip(@Valid @RequestBody TripDto tripDto) {
         tripService.updateTrip(tripDto);
         return ResponseEntity.ok(new ResponseMsg("Trip updated successfully!"));
     }
@@ -60,51 +60,29 @@ public class TripController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTrip(@PathVariable Long id) throws TripNotFoundException {
-        if (!tripRepository.existsById(id)) {
-            throw new TripNotFoundException(id);
-        }
+    public ResponseEntity<?> deleteTrip(@PathVariable Long id) {
         tripService.deleteById(id);
         return ResponseEntity.ok(new ResponseMsg("Trip deleted"));
     }
 
 
     @PutMapping("/{id}/askApproval")
-    public ResponseEntity<?> askApproval(@PathVariable Long id) throws TripNotFoundException {
-        if (!tripRepository.existsById(id)) {
-            throw new TripNotFoundException(id);
-        }
+    public ResponseEntity<?> askApproval(@PathVariable Long id) {
         tripService.updateStatus(id, TripStatusEnum.WAITING_FOR_APPROVAL);
         return ResponseEntity.ok(new ResponseMsg("Trip status updated to WAITING_FOR_APPROVAL !"));
     }
 
     @PutMapping("/{id}/approve")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> approve(@PathVariable Long id) throws TripNotFoundException {
-        if (!tripRepository.existsById(id)) {
-            throw new TripNotFoundException(id);
-        }
+    public ResponseEntity<?> approve(@PathVariable Long id) {
         tripService.updateStatus(id, TripStatusEnum.APPROVED);
         return ResponseEntity.ok(new ResponseMsg("Trip status updated to APPROVED!"));
     }
 
     @PutMapping("/attachFlight")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> attachFlight(@Valid @RequestBody AttachFlightRequest attachFlightRequest) throws FlightNotFoundException, AttachFlightException, TripNotFoundException {
-        if (!tripRepository.existsById(attachFlightRequest.getTrip_id())) {
-            throw new TripNotFoundException(attachFlightRequest.getTrip_id());
-        }
-        if (!flightRepository.existsById(attachFlightRequest.getFlight_id())) {
-            throw new FlightNotFoundException(attachFlightRequest.getFlight_id());
-        }
-        if (tripRepository.existsById(attachFlightRequest.getTrip_id())) {
-            Trip trip = tripRepository.findById(attachFlightRequest.getTrip_id()).get();
-            if (trip.getStatus() != TripStatusEnum.APPROVED) {
-                throw new AttachFlightException("Cannot add flight to a non Approved trip");
-            }
-        }
+    public ResponseEntity<?> attachFlight(@Valid @RequestBody AttachFlightRequest attachFlightRequest) {
         tripService.attachFlight(attachFlightRequest);
         return ResponseEntity.ok(new ResponseMsg("Flight is added to your trip!"));
     }
-
 }

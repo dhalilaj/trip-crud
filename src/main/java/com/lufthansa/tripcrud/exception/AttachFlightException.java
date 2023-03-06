@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Cannot add flight to a non Approved trip")
 
-public class AttachFlightException extends Exception {
+public class AttachFlightException extends RuntimeException {
 
     public AttachFlightException(String message) {
         super("Cannot add flight to a non Approved trip");
