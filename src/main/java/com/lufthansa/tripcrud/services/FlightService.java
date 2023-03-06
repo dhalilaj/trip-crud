@@ -10,12 +10,5 @@ import java.util.List;
 public interface FlightService {
 
     void createFlight(FlightDto flightDto);
-
-    //    void updateFlight(FlightDto flightDto);
     List<FlightDto> findAll();
-
-    void deleteById(Long id);
-
-//    List<FlightDto> findByFlight_nr( int flight_no);
-//    void save (FlightDto flightDto);
 }

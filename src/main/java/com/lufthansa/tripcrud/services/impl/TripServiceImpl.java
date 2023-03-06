@@ -44,6 +44,7 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public List<TripDto> findAll() {
+        // use the converter TripConverter -> convertToTripDto(trip)
         return tripRepository.findAll().stream().map(trip -> tripConverter.convertToDto(trip)).collect(Collectors.toList());
     }
 

@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 @SpringBootApplication
 //@EnableSwagger2
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class TripCrudApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TripCrudApplication.class, args);

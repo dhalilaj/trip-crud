@@ -36,9 +36,4 @@ public class FlightServiceImpl implements FlightService {
         return flightRepository.findAll().stream().map(flight -> flightConverter.convertToDto(flight)).collect(Collectors.toList());
     }
 
-    @Override
-    public void deleteById(Long id) {
-        flightRepository.deleteById(id);
-    }
-
 }

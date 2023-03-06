@@ -5,6 +5,7 @@ import com.lufthansa.tripcrud.dto.AttachFlightRequest;
 import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.dto.ResponseMsg;
 import com.lufthansa.tripcrud.entity.TripStatusEnum;
+import com.lufthansa.tripcrud.exception.TripNotFoundException;
 import com.lufthansa.tripcrud.repository.TripRepository;
 import com.lufthansa.tripcrud.services.TripService;
 import jakarta.validation.Valid;
@@ -46,15 +47,17 @@ public class TripController {
         return ResponseEntity.ok(new ResponseMsg("Trip updated successfully!"));
     }
 
-
-//    @GetMapping
-//    public List<TripDto> findAllTrips(){
-//        return tripService.findAll();
-//    }
+    @GetMapping
+    public List<TripDto> findAllTrips() {
+        return tripService.findAll();
+    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTrip(@PathVariable Long id) {
-        tripService.deleteById(id); //add service step
+    public ResponseEntity<?> deleteTrip(@PathVariable Long id) throws TripNotFoundException {
+        if (!tripRepository.existsById(id)) {
+            throw new TripNotFoundException(id);
+        }
+        tripService.deleteById(id);
         return ResponseEntity.ok(new ResponseMsg("Trip deleted"));
     }
 

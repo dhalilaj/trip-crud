@@ -10,7 +10,6 @@ public class TripConverter {
     public TripDto convertToDto(Trip trip) {
         TripDto convertedTrip = new TripDto();
         convertedTrip.setId(trip.getId());
-        convertedTrip.setFlight_id(trip.getFlight().getId());
         convertedTrip.setDescription(trip.getDescription());
         convertedTrip.setArrival_date(trip.getArrival_date());
         convertedTrip.setDeparture_date(trip.getDeparture_date());
@@ -18,6 +17,9 @@ public class TripConverter {
         convertedTrip.setDestination(trip.getDestination());
         convertedTrip.setStatus(trip.getStatus());
         convertedTrip.setTripreason(trip.getReason());
+        if (trip.getFlight() != null) {
+            convertedTrip.setFlight_id(trip.getFlight().getId());
+        }
         return convertedTrip;
     }
 

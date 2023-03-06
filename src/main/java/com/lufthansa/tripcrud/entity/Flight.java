@@ -37,7 +37,7 @@ public class Flight {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate arrival_date;
 
-    @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Trip> trip;
 
     public Flight(int flight_nr, String origin, String destination, LocalDate departure_date, LocalDate arrival_date) {

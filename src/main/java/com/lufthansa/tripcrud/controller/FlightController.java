@@ -33,12 +33,6 @@ public class FlightController {
         return ResponseEntity.ok(new ResponseMsg("You just created your flight"));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteFlight(@PathVariable Long id) {
-        flightService.deleteById(id); //add service step
-        return ResponseEntity.ok(new ResponseMsg("Flight deleted"));
-    }
-
     @GetMapping
     public List<FlightDto> findAllFlights() {
         return flightService.findAll();

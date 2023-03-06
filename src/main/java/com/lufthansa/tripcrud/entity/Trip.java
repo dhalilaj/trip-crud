@@ -53,12 +53,12 @@ public class Trip {
     private LocalDate arrival_date;
 
 
-    @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
 
-    @ManyToOne(targetEntity = Flight.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Flight.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "flight_id", referencedColumnName = "id")
     private Flight flight;
 
