@@ -61,9 +61,7 @@ public class WebSecurityConfig {//extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .authorizeHttpRequests().requestMatchers("/api/auth/**")
-                .permitAll().requestMatchers("/h2/**").permitAll().anyRequest().authenticated();
+        http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll().requestMatchers("/h2/*", "/swagger-ui/*", "/v3/api-docs/**").permitAll().anyRequest().authenticated();
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

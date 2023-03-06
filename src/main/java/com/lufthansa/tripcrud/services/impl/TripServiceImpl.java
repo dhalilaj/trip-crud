@@ -4,6 +4,9 @@ import com.lufthansa.tripcrud.converter.TripConverter;
 import com.lufthansa.tripcrud.dto.AttachFlightRequest;
 import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.entity.*;
+import com.lufthansa.tripcrud.exception.AttachFlightException;
+import com.lufthansa.tripcrud.exception.FlightNotFoundException;
+import com.lufthansa.tripcrud.exception.TripNotFoundException;
 import com.lufthansa.tripcrud.repository.FlightRepository;
 import com.lufthansa.tripcrud.repository.TripRepository;
 import com.lufthansa.tripcrud.repository.UserRepository;
@@ -44,7 +47,6 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public List<TripDto> findAll() {
-        // use the converter TripConverter -> convertToTripDto(trip)
         return tripRepository.findAll().stream().map(trip -> tripConverter.convertToDto(trip)).collect(Collectors.toList());
     }
 
@@ -75,7 +77,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public void deleteTrip(Long tripId) {
+    public void deleteTrip(Long tripId) throws TripNotFoundException {
 
         String headerAuth = request.getHeader("Authorization");
         String jwt = headerAuth.substring(7, headerAuth.length());
@@ -85,13 +87,13 @@ public class TripServiceImpl implements TripService {
         Optional<Trip> trip = tripRepository.findById(tripId);
 
         if (trip.isPresent()) {
-            Flight vehicle = trip.get().getFlight();
+            Flight flight = trip.get().getFlight();
 
-            vehicle.getTrip().remove(trip);
+            flight.getTrip().remove(trip);
             user.getTrip().remove(trip);
             tripRepository.deleteById(tripId);
         } else {
-            throw new RuntimeException("Trip does not exist!");
+            throw new TripNotFoundException(tripId);
         }
 
     }
@@ -103,7 +105,7 @@ public class TripServiceImpl implements TripService {
 
 
     @Override
-    public void updateTrip(TripDto tripDto) {
+    public void updateTrip(TripDto tripDto) throws TripNotFoundException {
 
         Optional<Trip> trip = tripRepository.findById(tripDto.getId());
 
@@ -116,14 +118,14 @@ public class TripServiceImpl implements TripService {
             trip.get().setReason(tripDto.getTripreason());
             tripRepository.save(trip.get());
         } else {
-            throw new RuntimeException("Trip does not exist!");
+            throw new TripNotFoundException(tripDto.getId());
         }
 
     }
 
 
     @Override
-    public void updateStatus(Long id, TripStatusEnum status) {
+    public void updateStatus(Long id, TripStatusEnum status) throws TripNotFoundException {
 
         Optional<Trip> trip = tripRepository.findById(id);
 
@@ -131,12 +133,12 @@ public class TripServiceImpl implements TripService {
             trip.get().setStatus(status);
             tripRepository.save(trip.get());
         } else {
-            throw new RuntimeException("Trip does not exist!");
+            throw new TripNotFoundException(id);
         }
     }
 
     @Override
-    public void attachFlight(AttachFlightRequest attachFlightRequest) {
+    public void attachFlight(AttachFlightRequest attachFlightRequest) throws FlightNotFoundException, AttachFlightException, TripNotFoundException {
         Optional<Trip> trip = tripRepository.findById(attachFlightRequest.getTrip_id());
         if (trip.isPresent()) {
             if (trip.get().getStatus().equals(TripStatusEnum.APPROVED)) {
@@ -147,14 +149,14 @@ public class TripServiceImpl implements TripService {
                     trip.get().setFlight(flight.get());
                     tripRepository.save(trip.get());
                 } else {
-                    throw new RuntimeException("Flight does not exist!");
+                    throw new FlightNotFoundException(attachFlightRequest.getFlight_id());
                 }
 
             } else {
-                throw new RuntimeException("You cannot add a flight to a non approved trip!");
+                throw new AttachFlightException("Cannot add flight to a non Approved trip");
             }
         } else {
-            throw new RuntimeException("Trip does not exist!");
+            throw new TripNotFoundException(attachFlightRequest.getTrip_id());
         }
     }
 

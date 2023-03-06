@@ -18,9 +18,25 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TripNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ResponseMsg userDoesNotExistException() {
+    public ResponseMsg tripDoesNotExistException() {
         logger.error("Trip Does Not Exist");
         return new ResponseMsg("Trip Does Not Exist");
+    }
+
+    @ExceptionHandler(FlightNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ResponseMsg flightDoesNotExistException() {
+        logger.error("Flight Does Not Exist");
+        return new ResponseMsg("Flight Does Not Exist");
+    }
+
+    @ExceptionHandler(AttachFlightException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ResponseMsg attachFlightException() {
+        logger.error("Cannot add flight to a non Approved trip");
+        return new ResponseMsg("Cannot add flight to a non Approved trip");
     }
 
 
