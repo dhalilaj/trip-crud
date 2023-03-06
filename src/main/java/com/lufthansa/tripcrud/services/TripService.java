@@ -4,7 +4,6 @@ import com.lufthansa.tripcrud.dto.AttachFlightRequest;
 import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.entity.Trip;
 import com.lufthansa.tripcrud.entity.TripStatusEnum;
-import com.lufthansa.tripcrud.exception.TripNotFoundException;
 
 import java.util.List;
 

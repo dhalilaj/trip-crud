@@ -7,6 +7,7 @@ import com.lufthansa.tripcrud.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/createUser")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
         if (userRepository.existsByUsername(createUserRequest.getUsername())) {
             return ResponseEntity.badRequest().body(new ResponseMsg("Error: User with this username already exists!"));
