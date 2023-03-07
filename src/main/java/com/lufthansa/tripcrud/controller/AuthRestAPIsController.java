@@ -55,7 +55,7 @@ public class AuthRestAPIsController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) throws Exception {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<String>("Username is already taken!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new ResponseMsg("Username is already taken!"), HttpStatus.BAD_REQUEST);
         }
 
         User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
@@ -64,7 +64,7 @@ public class AuthRestAPIsController {
         roles.add(roleRepository.findByCode(RoleName.USER).get());
         user.setRole(roles);
         userRepository.save(user);
-        return ResponseEntity.ok().body("User registered successfully!");
+        return ResponseEntity.ok().body(new ResponseMsg("User registered successfully!"));
     }
 
 }

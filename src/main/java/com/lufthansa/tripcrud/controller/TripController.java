@@ -2,13 +2,9 @@ package com.lufthansa.tripcrud.controller;
 
 
 import com.lufthansa.tripcrud.dto.AttachFlightRequest;
-import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.dto.ResponseMsg;
-import com.lufthansa.tripcrud.entity.Trip;
+import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.entity.TripStatusEnum;
-import com.lufthansa.tripcrud.exception.AttachFlightException;
-import com.lufthansa.tripcrud.exception.FlightNotFoundException;
-import com.lufthansa.tripcrud.exception.TripNotFoundException;
 import com.lufthansa.tripcrud.repository.FlightRepository;
 import com.lufthansa.tripcrud.repository.TripRepository;
 import com.lufthansa.tripcrud.services.TripService;
@@ -61,7 +57,7 @@ public class TripController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTrip(@PathVariable Long id) {
-        tripService.deleteById(id);
+        tripService.deleteTrip(id);
         return ResponseEntity.ok(new ResponseMsg("Trip deleted"));
     }
 
@@ -80,7 +76,6 @@ public class TripController {
     }
 
     @PutMapping("/attachFlight")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> attachFlight(@Valid @RequestBody AttachFlightRequest attachFlightRequest) {
         tripService.attachFlight(attachFlightRequest);
         return ResponseEntity.ok(new ResponseMsg("Flight is added to your trip!"));

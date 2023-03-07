@@ -11,14 +11,14 @@ public class TripConverter {
         TripDto convertedTrip = new TripDto();
         convertedTrip.setId(trip.getId());
         convertedTrip.setDescription(trip.getDescription());
-        convertedTrip.setArrival_date(trip.getArrival_date());
-        convertedTrip.setDeparture_date(trip.getDeparture_date());
+        convertedTrip.setArrivalDate(trip.getArrivalDate());
+        convertedTrip.setDepartureDate(trip.getDepartureDate());
         convertedTrip.setOrigin(trip.getOrigin());
         convertedTrip.setDestination(trip.getDestination());
         convertedTrip.setStatus(trip.getStatus());
-        convertedTrip.setTripreason(trip.getReason());
+        convertedTrip.setTripReason(trip.getReason());
         if (trip.getFlight() != null) {
-            convertedTrip.setFlight_id(trip.getFlight().getId());
+            convertedTrip.setFlightId(trip.getFlight().getId());
         }
         return convertedTrip;
     }

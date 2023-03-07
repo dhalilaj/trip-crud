@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class AttachFlightRequest {
 
-    Long flight_id;
+    Long flightId;
 
-    Long trip_id;
+    Long tripId;
 }

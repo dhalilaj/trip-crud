@@ -6,6 +6,7 @@ import com.lufthansa.tripcrud.dto.TripDto;
 import com.lufthansa.tripcrud.entity.*;
 import com.lufthansa.tripcrud.exception.AttachFlightException;
 import com.lufthansa.tripcrud.exception.FlightNotFoundException;
+import com.lufthansa.tripcrud.exception.NoPermissionException;
 import com.lufthansa.tripcrud.exception.TripNotFoundException;
 import com.lufthansa.tripcrud.repository.FlightRepository;
 import com.lufthansa.tripcrud.repository.TripRepository;
@@ -47,16 +48,18 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public List<TripDto> findAll() {
-        return tripRepository.findAll().stream().map(trip -> tripConverter.convertToDto(trip)).collect(Collectors.toList());
+        String headerAuth = request.getHeader("Authorization");
+        String jwt = headerAuth.substring(7, headerAuth.length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        return tripRepository.findAllByUserUsername(username).stream().map(trip -> tripConverter.convertToDto(trip)).collect(Collectors.toList());
     }
 
     @Override
     public List<TripDto> findTripByStatus(@PathVariable TripStatusEnum status) {
-        return tripRepository.findByStatus(status).stream().map(trip -> tripConverter.convertToDto(trip)).collect(Collectors.toList());
-    }
-
-    @Override
-    public void save(TripDto tripDto) {
+        String headerAuth = request.getHeader("Authorization");
+        String jwt = headerAuth.substring(7, headerAuth.length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        return tripRepository.findByStatusAndUserUsername(status, username).stream().map(trip -> tripConverter.convertToDto(trip)).collect(Collectors.toList());
     }
 
     @Override
@@ -67,7 +70,7 @@ public class TripServiceImpl implements TripService {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepository.findByUsername(username);
 
-        Trip trip = new Trip(user, tripDto.getDescription(), tripDto.getOrigin(), tripDto.getDestination(), TripStatusEnum.CREATED, tripDto.getDeparture_date(), tripDto.getArrival_date(), tripDto.getTripreason());
+        Trip trip = new Trip(user, tripDto.getDescription(), tripDto.getOrigin(), tripDto.getDestination(), TripStatusEnum.CREATED, tripDto.getDepartureDate(), tripDto.getArrivalDate(), tripDto.getTripReason());
 
         tripRepository.save(trip);
 
@@ -86,6 +89,10 @@ public class TripServiceImpl implements TripService {
         User user = userRepository.findByUsername(username);
         Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
 
+        if(!trip.getUser().getUsername().equals(username)){
+            throw new NoPermissionException();
+        }
+
         Flight flight = trip.getFlight();
 
         flight.getTrip().remove(trip);
@@ -94,23 +101,26 @@ public class TripServiceImpl implements TripService {
 
     }
 
-    @Override
-    public void deleteById(Long id) {
-        tripRepository.deleteById(id);
-    }
-
 
     @Override
     public void updateTrip(TripDto tripDto) throws TripNotFoundException {
 
         Trip trip = tripRepository.findById(tripDto.getId()).orElseThrow(() -> new TripNotFoundException(tripDto.getId()));
 
+        String headerAuth = request.getHeader("Authorization");
+        String jwt = headerAuth.substring(7, headerAuth.length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+
+        if(!trip.getUser().getUsername().equals(username)){
+            throw new NoPermissionException();
+        }
+
         trip.setDescription(tripDto.getDescription());
         trip.setOrigin(tripDto.getOrigin());
         trip.setDestination(tripDto.getDestination());
-        trip.setDeparture_date(tripDto.getDeparture_date());
-        trip.setArrival_date(tripDto.getArrival_date());
-        trip.setReason(tripDto.getTripreason());
+        trip.setDepartureDate(tripDto.getDepartureDate());
+        trip.setArrivalDate(tripDto.getArrivalDate());
+        trip.setReason(tripDto.getTripReason());
         tripRepository.save(trip);
 
     }
@@ -122,6 +132,10 @@ public class TripServiceImpl implements TripService {
         Optional<Trip> trip = tripRepository.findById(id);
 
         if (trip.isPresent()) {
+            if(status.equals(TripStatusEnum.APPROVED) && !trip.get().getStatus().equals(TripStatusEnum.WAITING_FOR_APPROVAL)) {
+                throw new RuntimeException("Trip is not in approval stage.");
+            }
+
             trip.get().setStatus(status);
             tripRepository.save(trip.get());
         } else {
@@ -131,10 +145,18 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public void attachFlight(AttachFlightRequest attachFlightRequest) {
-        Trip trip = tripRepository.findById(attachFlightRequest.getTrip_id()).orElseThrow(() -> new TripNotFoundException(attachFlightRequest.getTrip_id()));
+        Trip trip = tripRepository.findById(attachFlightRequest.getTripId()).orElseThrow(() -> new TripNotFoundException(attachFlightRequest.getTripId()));
+
+        String headerAuth = request.getHeader("Authorization");
+        String jwt = headerAuth.substring(7, headerAuth.length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+
+        if(!trip.getUser().getUsername().equals(username)){
+            throw new NoPermissionException();
+        }
 
         if (trip.getStatus().equals(TripStatusEnum.APPROVED)) {
-            Flight flight = flightRepository.findById(attachFlightRequest.getFlight_id()).orElseThrow(() -> new FlightNotFoundException(attachFlightRequest.getFlight_id()));
+            Flight flight = flightRepository.findById(attachFlightRequest.getFlightId()).orElseThrow(() -> new FlightNotFoundException(attachFlightRequest.getFlightId()));
             trip.setFlight(flight);
             tripRepository.save(trip);
         } else {

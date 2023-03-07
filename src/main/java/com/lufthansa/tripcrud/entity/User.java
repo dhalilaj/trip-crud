@@ -32,7 +32,7 @@ public class User {
         this.role = role;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,  fetch = FetchType.LAZY )
     private Set<Trip> trip;
 
     public User(String username, String password) {

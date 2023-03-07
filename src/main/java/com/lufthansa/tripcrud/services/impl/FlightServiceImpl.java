@@ -33,7 +33,9 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public List<FlightDto> findAll() {
-        return flightRepository.findAll().stream().map(flight -> flightConverter.convertToDto(flight)).collect(Collectors.toList());
+        return flightRepository.findAll().stream()
+                .map(flight -> flightConverter.convertToDto(flight))
+                .collect(Collectors.toList());
     }
 
 }

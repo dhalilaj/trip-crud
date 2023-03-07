@@ -1,6 +1,5 @@
 package com.lufthansa.tripcrud.security;
 
-import com.lufthansa.tripcrud.security.jwt.JwtAuthEntryPoint;
 import com.lufthansa.tripcrud.security.jwt.JwtAuthTokenFilter;
 import com.lufthansa.tripcrud.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +25,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {//extends WebSecurityConfigurerAdapter {
     UserDetailsServiceImpl userDetailsService;
 
-    private JwtAuthEntryPoint unauthorizedHandler;
-
     @Autowired
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthEntryPoint unauthorizedHandler) {
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService) {
         this.userDetailsService = userDetailsService;
-        this.unauthorizedHandler = unauthorizedHandler;
     }
 
     @Bean
@@ -61,7 +57,11 @@ public class WebSecurityConfig {//extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll().requestMatchers("/h2/*", "/swagger-ui/*", "/v3/api-docs/**").permitAll().anyRequest().authenticated();
+        http.cors()
+                .and().csrf().disable()
+                .authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/h2/*", "/swagger-ui/*", "/v3/api-docs/**").permitAll()
+                .anyRequest().authenticated();
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

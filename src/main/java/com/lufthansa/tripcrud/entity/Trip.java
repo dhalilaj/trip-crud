@@ -45,12 +45,12 @@ public class Trip {
     @NotNull
     @Column(name = "departure_date")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDate departure_date;
+    private LocalDate departureDate;
 
     @NotNull
     @Column(name = "arrival_date")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDate arrival_date;
+    private LocalDate arrivalDate;
 
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
@@ -62,15 +62,15 @@ public class Trip {
     @JoinColumn(name = "flight_id", referencedColumnName = "id")
     private Flight flight;
 
-    public Trip(User user, String description, String origin, String destination, TripStatusEnum status, LocalDate departure_date, LocalDate arrival_date, TripReasonEnum reason) {
+    public Trip(User user, String description, String origin, String destination, TripStatusEnum status, LocalDate departureDate, LocalDate arrivalDate, TripReasonEnum reason) {
 
         this.user = user;
         this.description = description;
         this.origin = origin;
         this.destination = destination;
         this.status = status;
-        this.departure_date = departure_date;
-        this.arrival_date = arrival_date;
+        this.departureDate = departureDate;
+        this.arrivalDate = arrivalDate;
         this.reason = reason;
     }
 }

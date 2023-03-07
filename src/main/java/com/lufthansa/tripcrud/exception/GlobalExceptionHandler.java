@@ -33,10 +33,27 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AttachFlightException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ResponseMsg attachFlightException() {
-        logger.error("Cannot add flight to a non Approved trip");
-        return new ResponseMsg("Cannot add flight to a non Approved trip");
+    public ResponseMsg attachFlightException(AttachFlightException attachFlightException) {
+        logger.error(attachFlightException.getMessage());
+        return new ResponseMsg(attachFlightException.getMessage());
     }
+
+    @ExceptionHandler(NoPermissionException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ResponseMsg noPermissionException(NoPermissionException noPermissionException) {
+        logger.error(noPermissionException.getMessage());
+        return new ResponseMsg(noPermissionException.getMessage());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ResponseMsg runtimeException(RuntimeException runtimeException) {
+        logger.error(runtimeException.getMessage());
+        return new ResponseMsg(runtimeException.getMessage());
+    }
+
 
 
 }

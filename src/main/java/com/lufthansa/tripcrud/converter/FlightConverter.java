@@ -11,9 +11,9 @@ public class FlightConverter {
 
         FlightDto convertedFlight = new FlightDto();
         convertedFlight.setId(flight.getId());
-        convertedFlight.setFlight_nr(flight.getFlight_nr());
-        convertedFlight.setDeparture_date(flight.getDeparture_date());
-        convertedFlight.setArrival_date(flight.getArrival_date());
+        convertedFlight.setFlight_nr(flight.getFlightNr());
+        convertedFlight.setDeparture_date(flight.getDepartureDate());
+        convertedFlight.setArrival_date(flight.getArrivalDate());
         convertedFlight.setOrigin(flight.getOrigin());
         convertedFlight.setDestination(flight.getDestination());
         return convertedFlight;

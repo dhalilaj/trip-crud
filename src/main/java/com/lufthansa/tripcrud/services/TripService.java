@@ -16,11 +16,8 @@ public interface TripService {
 
     List<TripDto> findTripByStatus(TripStatusEnum status);
 
-    void save(TripDto tripDto);
-
     void deleteTrip(Long id) throws TripNotFoundException;
 
-    void deleteById(Long id);
 
     Trip createTrip(TripDto tripDto);
 

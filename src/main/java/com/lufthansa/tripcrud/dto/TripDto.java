@@ -16,7 +16,7 @@ public class TripDto {
 
     private Long id;
 
-    private Long flight_id;
+    private Long flightId;
 
     @NotNull
     private String description;
@@ -32,13 +32,13 @@ public class TripDto {
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate departure_date;
+    private LocalDate departureDate;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate arrival_date;
+    private LocalDate arrivalDate;
 
     @NotNull
-    private TripReasonEnum tripreason;
+    private TripReasonEnum tripReason;
 
 }

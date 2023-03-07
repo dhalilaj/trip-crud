@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 public class SignUpRequest {
@@ -15,8 +13,5 @@ public class SignUpRequest {
 
     @NotNull
     private String password;
-
-    @NotNull
-    private Set<String> role;
 
 }

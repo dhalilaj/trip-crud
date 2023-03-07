@@ -21,7 +21,7 @@ public class Flight {
     private Long id;
 
     @Column(name = "flightNR", unique = true)
-    private int flight_nr;
+    private int flightNr;
 
     @Column(name = "Origin")
     private String origin;
@@ -31,21 +31,21 @@ public class Flight {
 
     @Column(name = "departure_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate departure_date;
+    private LocalDate departureDate;
 
     @Column(name = "arrival_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate arrival_date;
+    private LocalDate arrivalDate;
 
     @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Trip> trip;
 
-    public Flight(int flight_nr, String origin, String destination, LocalDate departure_date, LocalDate arrival_date) {
-        this.flight_nr = flight_nr;
+    public Flight(int flightNr, String origin, String destination, LocalDate departureDate, LocalDate arrivalDate) {
+        this.flightNr = flightNr;
         this.origin = origin;
         this.destination = destination;
-        this.departure_date = departure_date;
-        this.arrival_date = arrival_date;
+        this.departureDate = departureDate;
+        this.arrivalDate = arrivalDate;
     }
 
 
