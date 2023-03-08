@@ -26,7 +26,6 @@ public class FlightController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createFlight(@Valid @RequestBody FlightDto flightDto) {
 
         this.flightService.createFlight(flightDto);
